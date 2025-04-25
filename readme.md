@@ -36,3 +36,21 @@
 ```bash
 git clone https://github.com/Am1reux/jmstore.git
 cd jmstore
+```
+
+
+### 2. 安装环境：
+```
+cd jmstore
+mvn install
+mvn clean package
+```
+
+### 3. 启动项目：
+```
+mvn spring-boot:run
+```
+
+✨ 贡献
+欢迎提交 pull request，提出问题或建议，帮助我们一起完善这个项目！
+
