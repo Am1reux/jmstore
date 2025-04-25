@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- namespace:指定当前配置文件是给哪个接口文件中的抽象方法配置sql语句的 -->
+<mapper namespace="cn.tedu.jmstore.mapper.ProductMapper">
+	<resultMap id="ProductEntityMap" 
+	    type="cn.tedu.jmstore.entity.Product" >
+	    <id column="id" property="id"></id>
+	    <result column="category_id" property="categoryId"/>    
+	    <result column="item_type" property="itemType"/>    
+	    <result column="title" property="title"/>   
+	    <result column="sell_point" property="sellPoint"/>  
+	    <result column="price" property="price"/>   
+	    <result column="num" property="num"/>   
+	    <result column="image" property="image"/>   
+	    <result column="status" property="status"/> 
+	    <result column="priority" property="priority"/> 
+	    <result column="created_user" property="createdUser" />
+	    <result column="created_time" property="createdTime" />
+	    <result column="modified_user" property="modifiedUser" />
+	    <result column="modified_time" property="modifiedTime" />
+	</resultMap>
+	<!-- 查询优先级排行前4位的商品数据 -->
+	<!-- List<Product> findHotList() -->
+	<select id="findHotList"
+	resultType="cn.tedu.jmstore.entity.Product">
+	    select 
+	        id,title,
+	        price,image
+	    from 
+	        t_product
+	    where 
+	        status=1 and num > 0 
+	    order by 
+	        priority desc 
+	        limit 0,4
+	</select>
+	
+	<!-- 根据商品id查商品数据 -->
+	<!-- Product findById(Integer id) -->
+	<select id="findById"
+	    resultMap="ProductEntityMap">
+	    select 
+	        * 
+	    from 
+	        t_product 
+	    where 
+	        id=#{id}
+	</select>
+	
+	<!-- 实现模糊查询商品 -->
+	<!-- Product findByProductName(Integer id) -->
+	<select id="SearchProductList"
+	resultType="cn.tedu.jmstore.entity.Product">
+	    select 
+	        id,title,
+	        price,image
+	    from 
+	        t_product
+	    where 
+	        title like CONCAT('%',#{productName},'%')
+	    order by 
+	        priority desc 
+	        limit 0,4
+	</select>
+	
+	<!-- 查询优先级新创建排行前4的商品数据 -->
+	<!-- List<Product> findNewList() -->
+	<select id="findNewList"
+	resultType="cn.tedu.jmstore.entity.Product">
+	select 
+		id,title,price,image
+	from t_product
+	where 
+		status=1 and num > 0
+	order by
+		created_time desc
+			limit 0,4
+	</select>
+</mapper>

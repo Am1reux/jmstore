@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- namespace:指定当前配置文件是给哪个接口文件中的抽象方法配置sql语句的 -->
+<mapper namespace="cn.tedu.jmstore.mapper.UserMapper">
+
+	<!-- 指定数据库表的**列名(column)**和实体类的**属性名(property)**的对应关系 -->
+	<resultMap id="UserEntityMap" 
+		type="cn.tedu.jmstore.entity.User" >
+		<id column="uid" property="uid" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="salt" property="salt" />
+		<result column="is_delete" property="isDelete" />
+		<result column="phone" property="phone" />
+		<result column="email" property="email" />	
+		<result column="gender" property="gender" />	
+		<result column="avatar" property="avatar" />	
+		<result column="created_user" property="createdUser" />	
+		<result column="created_time" property="createdTime" />	
+		<result column="modified_user" property="modifiedUser" />	
+		<result column="modified_time" property="modifiedTime" />	
+	</resultMap>
+	
+	<!-- 给User findByUsername(String username)配置sql -->
+	<select id="findByUsername" resultType="cn.tedu.jmstore.entity.User">
+		select 
+			uid, username,
+			password, avatar,
+			salt, is_delete as isDelete 
+		from 
+			t_user 
+		where 
+			username=#{username}
+	</select>
+	
+	<!-- 给Integer addnew(User user)配置sql -->
+	<insert id="addnew">
+		insert into t_user (username,password,salt,is_delete,phone,email,gender,avatar,
+							created_user,created_time,modified_user,modified_time)
+					values (#{username},#{password},#{salt},#{isDelete},#{phone},#{email},
+							#{gender},#{avatar},#{createdUser},#{createdTime},#{modifiedUser},
+							#{modifiedTime})
+	</insert>
+	
+	<!-- 根据uid查用户信息 -->
+	<!-- User findByUid(Integer uid) -->
+	<select id="findByUid" 
+		resultMap="UserEntityMap">
+		select 
+			username, password, salt,
+			is_delete, phone,
+			email, gender
+		from 
+			t_user 
+		where 
+			uid=#{uid};
+	</select>
+	
+	<!-- 更新密码 -->
+	<!-- Integer updatePassword(
+		@Param("uid") Integer uid,
+		@Param("password") String password,
+		@Param("modifiedUser") String modifiedUser,
+		@Param("modifiedTime") Date modifiedTime)  -->
+	<update id="updatePassword">
+		update 
+			t_user
+		set 
+			password=#{password},
+			modified_user=#{modifiedUser}, 
+			modified_time=#{modifiedTime} 
+		where 
+			uid=#{uid}
+	</update>
+	
+	<!-- 修改用户信息 -->
+	<!-- Integer updateInfo(User user) -->
+	<update id="updateInfo">
+		update 
+			t_user
+		set 
+			phone=#{phone},
+			email=#{email},
+			gender=#{gender},
+			modified_user=#{modifiedUser}, 
+			modified_time=#{modifiedTime} 
+		where 
+			uid=#{uid}
+	</update>
+</mapper>
